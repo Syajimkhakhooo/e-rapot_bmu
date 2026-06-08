@@ -128,7 +128,7 @@ export default function EditReport() {
     updateReportMutation.mutate(formData)
   }
 
-  const getColor = (score) => score < 60 ? 'text-red-500' : ''
+  const getColor = (score) => score < 85 ? 'text-red-500' : ''
   const getBehaviorColor = (b) => {
     if (b === 'C') return 'text-orange-500'
     if (b === 'D') return 'text-red-500'
