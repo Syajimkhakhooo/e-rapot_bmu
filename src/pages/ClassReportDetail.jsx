@@ -18,7 +18,7 @@ const behaviorStyle = (b) => {
 export default function ClassReportDetail() {
   const { classId } = useParams()
   const queryClient = useQueryClient()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const { data: classInfo } = useQuery({
     queryKey: ['class', classId],
