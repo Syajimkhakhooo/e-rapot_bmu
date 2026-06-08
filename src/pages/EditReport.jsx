@@ -93,7 +93,7 @@ export default function EditReport() {
   const { data: signatories } = useQuery({
     queryKey: ['signatories'],
     queryFn: async () => {
-      const { data } = await supabase.from('signatories').select('*').eq('status', 'active')
+      const { data } = await supabase.from('signatories').select('*')
       return data || []
     }
   })
@@ -290,7 +290,7 @@ export default function EditReport() {
               <Select required value={formData.teacher_name} onValueChange={v => setFormData({...formData, teacher_name: v})}>
                 <SelectTrigger><SelectValue placeholder="Select teacher" /></SelectTrigger>
                 <SelectContent>
-                  {signatories?.filter(s => s.role === 'teacher').map(s => (
+                  {signatories?.filter(s => s.role === 'teacher' || s.role === 'Guru Pengajar').map(s => (
                     <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
                   ))}
                 </SelectContent>
@@ -301,7 +301,7 @@ export default function EditReport() {
               <Select required value={formData.headmaster_name} onValueChange={v => setFormData({...formData, headmaster_name: v})}>
                 <SelectTrigger><SelectValue placeholder="Select headmaster" /></SelectTrigger>
                 <SelectContent>
-                  {signatories?.filter(s => s.role === 'director').map(s => (
+                  {signatories?.filter(s => s.role === 'director' || s.role === 'Kepala Sekolah').map(s => (
                     <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
                   ))}
                 </SelectContent>
