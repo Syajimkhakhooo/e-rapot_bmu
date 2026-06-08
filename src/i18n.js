@@ -1,0 +1,410 @@
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+
+const resources = {
+  id: {
+    translation: {
+      // General
+      "appName": "E-RAPOT BMU",
+      "loading": "Memuat...",
+      "save": "Simpan",
+      "cancel": "Batal",
+      "delete": "Hapus",
+      "edit": "Ubah",
+      "create": "Buat",
+      "update": "Perbarui",
+      "action": "Aksi",
+      "status": "Status",
+      "active": "Aktif",
+      "inactive": "Nonaktif",
+      "search": "Cari...",
+      "logout": "Keluar",
+      "language": "Bahasa",
+      "no_data": "Tidak ada data",
+      "back": "Kembali",
+      "view_all": "Lihat Semua",
+
+      // Menu
+      "menu_dashboard": "Beranda",
+      "menu_users": "Pengguna",
+      "menu_classes": "Kelas",
+      "menu_students": "Siswa",
+      "menu_reports": "Rapot",
+      "menu_class_reports": "Rapot per Kelas",
+      "menu_history": "Riwayat Rapot",
+      "menu_signatories": "Penandatangan",
+
+      // Dashboard
+      "dash_title": "Beranda",
+      "dash_welcome": "Selamat Datang kembali, {{name}}.",
+      "dash_subtitle": "Berikut adalah ringkasan aktivitas hari ini.",
+      "dash_total_students": "Total Siswa",
+      "dash_active_classes": "Kelas Aktif",
+      "dash_reports_generated": "Total Rapot",
+      "dash_recent_activity": "Aktivitas Terbaru",
+      "dash_view_all": "Lihat semua",
+      "dash_no_activity": "Belum ada aktivitas terbaru.",
+
+      // Users
+      "users_title": "Manajemen Pengguna",
+      "users_desc": "Kelola administrator dan sensei dalam sistem.",
+      "users_add": "Tambah Pengguna",
+      "users_name": "Nama Lengkap",
+      "users_email": "Email",
+      "users_role": "Peran",
+      "users_edit_profile": "Ubah Profil & Sandi",
+      "users_deactivate": "Nonaktifkan Pengguna",
+      "users_activate": "Aktifkan Pengguna",
+      "users_joined_date": "Tanggal Bergabung",
+      "users_search": "Cari pengguna...",
+      "password": "Kata Sandi",
+      "users_success_add": "Pengguna berhasil ditambahkan",
+
+      // Classes
+      "classes_title": "Manajemen Kelas",
+      "classes_desc": "Kelola data kelas dan level pendaftaran.",
+      "classes_add": "Tambah Kelas",
+      "classes_name": "Nama Kelas",
+      "classes_level": "Level",
+      "classes_capacity": "Kapasitas",
+      "classes_schedule": "Jadwal",
+      "classes_created": "Dibuat pada",
+      "classes_success_add": "Kelas berhasil ditambahkan",
+      "classes_success_delete": "Kelas berhasil dihapus",
+
+      // Students
+      "students_title": "Direktori Siswa",
+      "students_desc": "Kelola profil siswa dan penempatan kelas.",
+      "students_add": "Tambah Siswa",
+      "students_name": "Nama Lengkap",
+      "students_jp_name": "Nama Jepang (Katakana)",
+      "students_id": "Nomor Induk / ID",
+      "students_gender": "Jenis Kelamin",
+      "students_dob": "Tanggal Lahir",
+      "students_class": "Kelas",
+      "gender_male": "Laki-laki",
+      "gender_female": "Perempuan",
+      "students_search": "Cari berdasarkan nama atau ID...",
+      "students_filter": "Filter",
+      "students_edit_student": "Ubah Data Siswa",
+      "students_add_photo": "Tambah Foto (Opsional)",
+      "students_change_photo": "Ubah Foto",
+      "students_delete_confirm": "Hapus Siswa",
+      "students_delete_msg": "Apakah Anda yakin ingin menghapus siswa ini? Aksi ini tidak dapat dibatalkan.",
+      "students_success_add": "Siswa berhasil ditambahkan",
+      "students_success_update": "Siswa berhasil diperbarui",
+      "students_success_delete": "Siswa berhasil dihapus",
+
+      // Reports
+      "reports_title": "Manajemen Rapot",
+      "reports_desc": "Kelola dan buat rapot bulanan siswa.",
+      "reports_create": "Buat Rapot Baru",
+      "reports_student": "Siswa",
+      "reports_period": "Periode",
+      "reports_behavior": "Perilaku",
+      "reports_view_print": "Lihat & Cetak",
+      "reports_edit": "Ubah Rapot",
+      "reports_archive": "Arsipkan",
+      "reports_delete_confirm": "Hapus Rapot",
+      "reports_delete_msg": "Apakah Anda yakin ingin menghapus rapot ini? Aksi ini tidak dapat dibatalkan.",
+      "reports_success_delete": "Rapot berhasil dihapus",
+      "print": "Cetak",
+
+      // Class Reports
+      "creports_title": "Rapot per Kelas",
+      "creports_desc": "Pilih kelas untuk melihat rapot siswa yang telah dibuat.",
+      "creports_generated": "Rapot Dibuat",
+      "creports_no_class": "Belum ada kelas.",
+      "creports_detail_title": "Rapot Kelas:",
+      "creports_detail_desc": "Kelola rapot yang telah dibuat khusus untuk kelas ini.",
+
+      // History
+      "history_title": "Riwayat Rapot",
+      "history_desc": "Lihat dan pulihkan rapot siswa yang telah diarsipkan.",
+      "history_restore": "Pulihkan",
+      "history_archived_date": "Tanggal Arsip",
+      "history_filter_class": "Filter Kelas",
+      "history_all_classes": "Semua Kelas",
+      "history_no_data": "Belum ada riwayat rapot.",
+      "history_activity_title": "Riwayat Aktivitas",
+      "history_activity_desc": "Log audit untuk semua aktivitas sistem.",
+      "history_search": "Cari riwayat...",
+
+      // Signatories
+      "sig_title": "Penandatangan",
+      "sig_desc": "Kelola penandatangan rapot.",
+      "sig_add": "Tambah Penandatangan",
+      "sig_name": "Nama",
+      "sig_role": "Peran",
+      "sig_director": "Direktur",
+      "sig_teacher": "Pengajar",
+      "sig_no_data": "Belum ada data penandatangan.",
+      "sig_success_add": "Penandatangan berhasil ditambahkan",
+      "sig_success_delete": "Penandatangan berhasil dihapus",
+
+      // Create/Edit Report Form
+      "form_student_period": "Siswa & Periode",
+      "form_search_student": "Cari Siswa...",
+      "form_period_start": "Mulai Periode",
+      "form_period_end": "Akhir Periode",
+      "form_select_student": "Pilih Siswa",
+
+      // Verify
+      "verify_title": "Verifikasi Dokumen",
+      "verify_verifying": "Memverifikasi dokumen...",
+      "verify_invalid_title": "Dokumen Tidak Valid",
+      "verify_invalid_desc": "Dokumen yang Anda pindai tidak ditemukan di database kami atau mungkin palsu.",
+      "verify_valid_title": "Terverifikasi Asli",
+      "verify_valid_desc": "Dokumen ini diterbitkan secara resmi oleh Bina Mutu Utama.",
+      "verify_issued_date": "Tanggal Terbit",
+      "verify_go_login": "Menuju Login",
+
+      // Login
+      "login_welcome": "Selamat Datang Kembali",
+      "login_subtitle": "Silakan masukkan detail Anda untuk masuk.",
+      "login_signin": "Masuk",
+      "login_signing_in": "Sedang masuk...",
+
+      "form_study_time": "Waktu Belajar (Jam)",
+      "form_material": "Materi Belajar",
+      "form_scores": "Nilai Akademik",
+      "form_vocab": "Kosakata",
+      "form_hiragana": "Hiragana",
+      "form_katakana": "Katakana",
+      "form_exam": "Hasil Ujian",
+      "form_attendance": "Kehadiran & Perilaku",
+      "form_sick": "Sakit",
+      "form_permission": "Ijin",
+      "form_absent": "Alfa",
+      "form_physical": "Tes Fisik",
+      "form_pushup": "Push Up",
+      "form_situp": "Sit Up",
+      "form_run": "Lari",
+      "form_notes": "Catatan",
+      "form_teacher_notes": "Catatan Guru",
+      "form_add_notes": "Catatan (Jepang)",
+      "form_signatures": "Tanda Tangan",
+      "form_guardian": "Nama Wali",
+      "form_teacher": "Sensei",
+      "form_headmaster": "Kepala Sekolah",
+      "form_save_report": "Simpan Rapot",
+      "form_update_report": "Perbarui Rapot",
+
+      // Notifications & Topbar
+      "notif_title": "Notifikasi",
+      "notif_mark_read": "Tandai semua dibaca",
+      "notif_view_all": "Lihat semua notifikasi",
+      "notif_empty": "Belum ada notifikasi.",
+      "menu_profile": "Profil"
+    }
+  },
+  ja: {
+    translation: {
+      // General
+      "appName": "E-RAPOT BMU",
+      "loading": "読み込み中...",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "delete": "削除",
+      "edit": "編集",
+      "create": "作成",
+      "update": "更新",
+      "action": "操作",
+      "status": "ステータス",
+      "active": "アクティブ",
+      "inactive": "非アクティブ",
+      "search": "検索...",
+      "logout": "ログアウト",
+      "language": "言語",
+      "no_data": "データなし",
+      "back": "戻る",
+      "view_all": "すべて見る",
+
+      // Menu
+      "menu_dashboard": "ダッシュボード",
+      "menu_users": "ユーザー",
+      "menu_classes": "クラス",
+      "menu_students": "学生",
+      "menu_reports": "成績表",
+      "menu_class_reports": "クラス別成績",
+      "menu_history": "履歴",
+      "menu_signatories": "署名者",
+
+      // Dashboard
+      "dash_title": "ダッシュボード",
+      "dash_welcome": "お帰りなさい、{{name}}さん。",
+      "dash_subtitle": "本日の活動概要です。",
+      "dash_total_students": "総学生数",
+      "dash_active_classes": "アクティブクラス",
+      "dash_reports_generated": "総成績表",
+      "dash_recent_activity": "最近の活動",
+      "dash_view_all": "すべて見る",
+      "dash_no_activity": "最近の活動はありません。",
+
+      // Users
+      "users_title": "ユーザー管理",
+      "users_desc": "システムの管理者と先生を管理します。",
+      "users_add": "ユーザー追加",
+      "users_name": "氏名",
+      "users_email": "メール",
+      "users_role": "役割",
+      "users_edit_profile": "プロフィールとパスワードを編集",
+      "users_deactivate": "ユーザーを無効にする",
+      "users_activate": "ユーザーを有効にする",
+      "users_joined_date": "参加日",
+      "users_search": "ユーザーを検索...",
+      "password": "パスワード",
+      "users_success_add": "ユーザーが追加されました",
+
+      // Classes
+      "classes_title": "クラス管理",
+      "classes_desc": "クラスデータと登録レベルを管理します。",
+      "classes_add": "クラス追加",
+      "classes_name": "クラス名",
+      "classes_level": "レベル",
+      "classes_capacity": "定員",
+      "classes_schedule": "スケジュール",
+      "classes_created": "作成日",
+      "classes_success_add": "クラスが追加されました",
+      "classes_success_delete": "クラスが削除されました",
+
+      // Students
+      "students_title": "学生名簿",
+      "students_desc": "学生のプロフィールとクラス配置を管理します。",
+      "students_add": "学生追加",
+      "students_name": "氏名",
+      "students_jp_name": "カタカナ名",
+      "students_id": "学生ID",
+      "students_gender": "性別",
+      "students_dob": "生年月日",
+      "students_class": "クラス",
+      "gender_male": "男性",
+      "gender_female": "女性",
+      "students_search": "名前またはIDで検索...",
+      "students_filter": "フィルター",
+      "students_edit_student": "学生データを編集",
+      "students_add_photo": "写真を追加 (任意)",
+      "students_change_photo": "写真を変更",
+      "students_delete_confirm": "学生を削除",
+      "students_delete_msg": "この学生を削除してもよろしいですか？この操作は元に戻せません。",
+      "students_success_add": "学生が追加されました",
+      "students_success_update": "学生が更新されました",
+      "students_success_delete": "学生が削除されました",
+
+      // Reports
+      "reports_title": "成績表管理",
+      "reports_desc": "学生の月間成績表を管理・作成します。",
+      "reports_create": "新規成績表作成",
+      "reports_student": "学生",
+      "reports_period": "期間",
+      "reports_behavior": "態度",
+      "reports_view_print": "表示＆印刷",
+      "reports_edit": "成績表を編集",
+      "reports_archive": "アーカイブ",
+      "reports_delete_confirm": "成績表を削除",
+      "reports_delete_msg": "この成績表を削除してもよろしいですか？この操作は元に戻せません。",
+      "reports_success_delete": "成績表が削除されました",
+      "print": "印刷",
+
+      // Class Reports
+      "creports_title": "クラス別成績表",
+      "creports_desc": "クラスを選択して作成済みの成績表を表示します。",
+      "creports_generated": "作成済み",
+      "creports_no_class": "クラスがありません。",
+      "creports_detail_title": "クラスの成績表:",
+      "creports_detail_desc": "このクラス専用の成績表を管理します。",
+
+      // History
+      "history_title": "成績表履歴",
+      "history_desc": "アーカイブされた成績表を表示および復元します。",
+      "history_restore": "復元",
+      "history_archived_date": "アーカイブ日",
+      "history_filter_class": "クラスフィルター",
+      "history_all_classes": "すべてのクラス",
+      "history_no_data": "履歴データがありません。",
+      "history_activity_title": "活動履歴",
+      "history_activity_desc": "システムアクティビティの監査ログ。",
+      "history_search": "履歴を検索...",
+
+      // Signatories
+      "sig_title": "署名者",
+      "sig_desc": "成績表の署名者を管理します。",
+      "sig_add": "署名者追加",
+      "sig_name": "氏名",
+      "sig_role": "役割",
+      "sig_director": "ディレクター",
+      "sig_teacher": "先生",
+      "sig_no_data": "署名者のデータがありません。",
+      "sig_success_add": "署名者が追加されました",
+      "sig_success_delete": "署名者が削除されました",
+
+      // Create/Edit Report Form
+      "form_student_period": "学生と期間",
+      "form_search_student": "学生を検索...",
+      "form_period_start": "期間開始",
+      "form_period_end": "期間終了",
+      "form_select_student": "学生を選択",
+
+      // Verify
+      "verify_title": "文書の検証",
+      "verify_verifying": "文書を検証中...",
+      "verify_invalid_title": "無効な文書",
+      "verify_invalid_desc": "スキャンした文書はデータベースに存在しないか、偽造の可能性があります。",
+      "verify_valid_title": "本物と確認済",
+      "verify_valid_desc": "この文書はBina Mutu Utamaによって正式に発行されました。",
+      "verify_issued_date": "発行日",
+      "verify_go_login": "ログインへ",
+
+      // Login
+      "login_welcome": "おかえりなさい",
+      "login_subtitle": "詳細を入力してサインインしてください。",
+      "login_signin": "サインイン",
+      "login_signing_in": "サインイン中...",
+
+      "form_study_time": "学習時間 (時間)",
+      "form_material": "学習内容",
+      "form_scores": "学業成績",
+      "form_vocab": "語彙",
+      "form_hiragana": "ひらがな",
+      "form_katakana": "カタカナ",
+      "form_exam": "試験結果",
+      "form_attendance": "出席と態度",
+      "form_sick": "病欠",
+      "form_permission": "許可",
+      "form_absent": "欠席",
+      "form_physical": "体力テスト",
+      "form_pushup": "腕立て伏せ",
+      "form_situp": "腹筋",
+      "form_run": "ランニング",
+      "form_notes": "備考",
+      "form_teacher_notes": "先生のコメント",
+      "form_add_notes": "コメント (日本語)",
+      "form_signatures": "署名",
+      "form_guardian": "保護者名",
+      "form_teacher": "先生",
+      "form_headmaster": "校長",
+      "form_save_report": "成績表を保存",
+      "form_update_report": "成績表を更新",
+
+      // Notifications & Topbar
+      "notif_title": "通知",
+      "notif_mark_read": "すべて既読にする",
+      "notif_view_all": "すべての通知を見る",
+      "notif_empty": "通知はありません。",
+      "menu_profile": "プロフィール"
+    }
+  }
+}
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: 'id', // Default language
+    fallbackLng: 'id',
+    interpolation: {
+      escapeValue: false // react already safes from xss
+    }
+  })
+
+export default i18n

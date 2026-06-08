@@ -1,0 +1,284 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { supabase } from '@/config/supabase'
+import { useAuthStore } from '@/store/useAuthStore'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { toast } from 'sonner'
+import { v4 as uuidv4 } from 'uuid'
+import { useTranslation } from 'react-i18next'
+
+export default function CreateReport() {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const { user } = useAuthStore()
+  const { t } = useTranslation()
+
+  const [formData, setFormData] = useState({
+    student_id: '',
+    period_start: '',
+    period_end: '',
+    study_time: '',
+    learning_material: '',
+    score_kosakata: 0,
+    score_hiragana: 0,
+    score_katakana: 0,
+    score_ujian: 0,
+    attendance_sakit: 0,
+    attendance_ijin: 0,
+    attendance_alfa: 0,
+    behavior: 'A',
+    teacher_notes: '',
+    additional_notes: '',
+    physical_push_up: '',
+    physical_sit_up: '',
+    physical_lari: '',
+    guardian_name: '',
+    teacher_name: '',
+    headmaster_name: ''
+  })
+
+  const { data: students } = useQuery({
+    queryKey: ['students'],
+    queryFn: async () => {
+      const { data } = await supabase.from('students').select('*, classes(name)').is('deleted_at', null)
+      return data || []
+    }
+  })
+
+  const { data: signatories } = useQuery({
+    queryKey: ['signatories'],
+    queryFn: async () => {
+      const { data } = await supabase.from('signatories').select('*').eq('status', 'active')
+      return data || []
+    }
+  })
+
+  const createReportMutation = useMutation({
+    mutationFn: async (reportData) => {
+      // Create Verification Token
+      const verification_token = uuidv4()
+      
+      const { data, error } = await supabase.from('reports').insert([{
+        ...reportData,
+        verification_token,
+        created_by: user?.id
+      }])
+      
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['reports'])
+      toast.success('Report created successfully')
+      navigate('/reports')
+    },
+    onError: (error) => {
+      if (error.message.includes('duplicate key value')) {
+        toast.error('A report for this student and period already exists!')
+      } else {
+        toast.error(error.message)
+      }
+    }
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    createReportMutation.mutate(formData)
+  }
+
+  const getColor = (score) => score < 60 ? 'text-red-500' : ''
+  const getBehaviorColor = (b) => {
+    if (b === 'C') return 'text-orange-500'
+    if (b === 'D') return 'text-red-500'
+    return ''
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-5 pb-12">
+      <div>
+        <h2 className="text-xl font-extrabold text-slate-800">{t('reports_create')}</h2>
+        <p className="text-sm text-slate-500 mt-0.5">{t('reports_desc')}</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-primary/5 to-transparent">
+            <h3 className="font-bold text-slate-800 text-sm">{t('form_student_period')}</h3>
+          </div>
+          <div className="p-6 grid grid-cols-2 gap-4">
+            <div className="space-y-2 col-span-2">
+              <Label>{t('reports_student')}</Label>
+              <Select required value={formData.student_id} onValueChange={v => setFormData({...formData, student_id: v})}>
+                <SelectTrigger><SelectValue placeholder="Select student..." /></SelectTrigger>
+                <SelectContent>
+                  {students?.map(s => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.full_name} ({s.student_id}) - {s.classes?.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>{t('form_period_start')}</Label>
+              <Input type="date" required value={formData.period_start} onChange={e => setFormData({...formData, period_start: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label>{t('form_period_end')}</Label>
+              <Input type="date" required value={formData.period_end} onChange={e => setFormData({...formData, period_end: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label>{t('form_study_time')} (Contoh: 08.00 - 12.00)</Label>
+              <Input type="text" required value={formData.study_time} placeholder="08.00 - 12.00" onChange={e => setFormData({...formData, study_time: e.target.value})} />
+            </div>
+            <div className="space-y-2 col-span-2">
+              <Label>{t('form_material')}</Label>
+              <Input required placeholder="e.g. Minna no Nihongo Bab 1-5" value={formData.learning_material} onChange={e => setFormData({...formData, learning_material: e.target.value})} />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-secondary/5 to-transparent">
+            <h3 className="font-bold text-slate-800 text-sm">{t('form_scores')}</h3>
+          </div>
+          <div className="p-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <Label className={getColor(formData.score_kosakata)}>Kosakata</Label>
+              <Input type="number" min="0" max="100" required value={formData.score_kosakata} onChange={e => setFormData({...formData, score_kosakata: parseInt(e.target.value)})} />
+            </div>
+            <div className="space-y-2">
+              <Label className={getColor(formData.score_hiragana)}>Hiragana</Label>
+              <Input type="number" min="0" max="100" required value={formData.score_hiragana} onChange={e => setFormData({...formData, score_hiragana: parseInt(e.target.value)})} />
+            </div>
+            <div className="space-y-2">
+              <Label className={getColor(formData.score_katakana)}>Katakana</Label>
+              <Input type="number" min="0" max="100" required value={formData.score_katakana} onChange={e => setFormData({...formData, score_katakana: parseInt(e.target.value)})} />
+            </div>
+            <div className="space-y-2">
+              <Label className={getColor(formData.score_ujian)}>Hasil Ujian</Label>
+              <Input type="number" min="0" max="100" required value={formData.score_ujian} onChange={e => setFormData({...formData, score_ujian: parseInt(e.target.value)})} />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-primary/5 to-transparent">
+              <h3 className="font-bold text-slate-800 text-sm">{t('form_attendance')}</h3>
+            </div>
+            <div className="p-6 grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label>{t('form_sick')}</Label>
+                <Input type="number" min="0" required value={formData.attendance_sakit} onChange={e => setFormData({...formData, attendance_sakit: parseInt(e.target.value)})} />
+              </div>
+              <div className="space-y-2">
+                <Label>{t('form_permission')}</Label>
+                <Input type="number" min="0" required value={formData.attendance_ijin} onChange={e => setFormData({...formData, attendance_ijin: parseInt(e.target.value)})} />
+              </div>
+              <div className="space-y-2">
+                <Label>{t('form_absent')}</Label>
+                <Input type="number" min="0" required value={formData.attendance_alfa} onChange={e => setFormData({...formData, attendance_alfa: parseInt(e.target.value)})} />
+              </div>
+              <div className="space-y-2 col-span-3">
+                <Label className={getBehaviorColor(formData.behavior)}>{t('reports_behavior')}</Label>
+                <Select value={formData.behavior} onValueChange={v => setFormData({...formData, behavior: v})}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="A">A - Amat Baik</SelectItem>
+                    <SelectItem value="B">B - Baik</SelectItem>
+                    <SelectItem value="C">C - Cukup</SelectItem>
+                    <SelectItem value="D">D - Kurang</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-secondary/5 to-transparent">
+              <h3 className="font-bold text-slate-800 text-sm">{t('form_physical')}</h3>
+            </div>
+            <div className="p-6 grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <Label>Push Up</Label>
+                <Input placeholder="e.g. 50x / Menit" value={formData.physical_push_up} onChange={e => setFormData({...formData, physical_push_up: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label>Sit Up</Label>
+                <Input placeholder="e.g. 45x / Menit" value={formData.physical_sit_up} onChange={e => setFormData({...formData, physical_sit_up: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label>Lari</Label>
+                <Input placeholder="e.g. 15 Menit / 2 KM" value={formData.physical_lari} onChange={e => setFormData({...formData, physical_lari: e.target.value})} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-primary/5 to-transparent">
+            <h3 className="font-bold text-slate-800 text-sm">{t('form_notes')}</h3>
+          </div>
+          <div className="p-6 grid grid-cols-1 gap-4">
+            <div className="space-y-2">
+              <Label>Teacher Notes (Catatan Guru)</Label>
+              <Textarea rows={3} value={formData.teacher_notes} onChange={e => setFormData({...formData, teacher_notes: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label>Additional Notes (Catatan ノート)</Label>
+              <Textarea rows={3} value={formData.additional_notes} onChange={e => setFormData({...formData, additional_notes: e.target.value})} />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-secondary/5 to-transparent">
+            <h3 className="font-bold text-slate-800 text-sm">{t('form_signatures')}</h3>
+          </div>
+          <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label>{t('form_guardian')}</Label>
+              <Input placeholder="Wali Siswa" required value={formData.guardian_name} onChange={e => setFormData({...formData, guardian_name: e.target.value})} />
+            </div>
+            <div className="space-y-2">
+              <Label>{t('form_teacher')}</Label>
+              <Select required value={formData.teacher_name} onValueChange={v => setFormData({...formData, teacher_name: v})}>
+                <SelectTrigger><SelectValue placeholder="Select teacher" /></SelectTrigger>
+                <SelectContent>
+                  {signatories?.filter(s => s.role === 'teacher').map(s => (
+                    <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>{t('form_headmaster')}</Label>
+              <Select required value={formData.headmaster_name} onValueChange={v => setFormData({...formData, headmaster_name: v})}>
+                <SelectTrigger><SelectValue placeholder="Select headmaster" /></SelectTrigger>
+                <SelectContent>
+                  {signatories?.filter(s => s.role === 'director').map(s => (
+                    <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" disabled={createReportMutation.isPending}
+          className="w-full h-12 rounded-2xl font-bold text-white text-sm bg-gradient-to-r from-primary to-secondary shadow-primary-glow hover:opacity-90 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60">
+          {createReportMutation.isPending ? (
+            <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>{t('loading')}</>
+          ) : t('form_save_report')}
+        </button>
+      </form>
+    </div>
+  )
+}
