@@ -155,9 +155,8 @@ const resources = {
       "verify_verifying": "Memverifikasi dokumen...",
       "verify_invalid_title": "Dokumen Tidak Valid",
       "verify_invalid_desc": "Dokumen yang Anda pindai tidak ditemukan di database kami atau mungkin palsu.",
-      "verify_valid_title": "Terverifikasi Asli",
-      "verify_valid_desc": "Dokumen ini diterbitkan secara resmi oleh Bina Mutu Utama.",
-      "verify_issued_date": "Tanggal Terbit",
+      "verify_valid_title": "Dokumen Valid",
+      "verify_valid_desc": "Dokumen ini diterbitkan secara resmi oleh Bahtera Mitra Unggulan.",
       "verify_go_login": "Menuju Login",
 
       // Login
@@ -352,9 +351,8 @@ const resources = {
       "verify_verifying": "文書を検証中...",
       "verify_invalid_title": "無効な文書",
       "verify_invalid_desc": "スキャンした文書はデータベースに存在しないか、偽造の可能性があります。",
-      "verify_valid_title": "本物と確認済",
-      "verify_valid_desc": "この文書はBina Mutu Utamaによって正式に発行されました。",
-      "verify_issued_date": "発行日",
+      "verify_valid_title": "有効な文書",
+      "verify_valid_desc": "この文書はBahtera Mitra Unggulanによって正式に発行されました。",
       "verify_go_login": "ログインへ",
 
       // Login
