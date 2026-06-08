@@ -134,8 +134,8 @@ export default function CreateReport() {
               <Input type="date" required value={formData.period_end} onChange={e => setFormData({...formData, period_end: e.target.value})} />
             </div>
             <div className="space-y-2">
-              <Label>{t('form_study_time')}</Label>
-              <Input type="number" min="0" required value={formData.study_time} placeholder="e.g. 120" onChange={e => setFormData({...formData, study_time: parseInt(e.target.value) || 0})} />
+              <Label>{t('form_study_time')} (Contoh: 08.00 - 12.00)</Label>
+              <Input type="text" required value={formData.study_time} placeholder="08.00 - 12.00" onChange={e => setFormData({...formData, study_time: e.target.value})} />
             </div>
             <div className="space-y-2 col-span-2">
               <Label>{t('form_material')}</Label>

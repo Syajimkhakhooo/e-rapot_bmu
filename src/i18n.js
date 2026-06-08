@@ -166,7 +166,7 @@ const resources = {
       "login_signin": "Masuk",
       "login_signing_in": "Sedang masuk...",
 
-      "form_study_time": "Waktu Belajar (Jam)",
+      "form_study_time": "Waktu Belajar",
       "form_material": "Materi Belajar",
       "form_scores": "Nilai Akademik",
       "form_vocab": "Kosakata",
@@ -363,7 +363,7 @@ const resources = {
       "login_signin": "サインイン",
       "login_signing_in": "サインイン中...",
 
-      "form_study_time": "学習時間 (時間)",
+      "form_study_time": "学習時間",
       "form_material": "学習内容",
       "form_scores": "学業成績",
       "form_vocab": "語彙",
