@@ -83,14 +83,14 @@ export default function PrintReport() {
           
           {/* Logo Watermark (Optional) */}
           <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-            <img src="/logo for overlay.png" alt="Watermark" className="w-[500px] object-contain" />
+            <img src="/logo.png" alt="Watermark" className="w-[500px] object-contain" />
           </div>
 
           <div className="relative z-10">
             {/* Header */}
             <div className="flex items-start justify-between pb-4 mb-4">
               <div className="flex-none">
-                <img src="/LOGO RAPOT.png" alt="Logo BMU" className="w-[100px] h-[100px] object-contain flex-shrink-0" onError={(e) => e.target.style.display = 'none'} />
+                <img src="/logo-rapot.png" alt="Logo BMU" className="w-[100px] h-[100px] object-contain flex-shrink-0" onError={(e) => e.target.style.display = 'none'} />
               </div>
               <div className="flex-1 text-center pt-2">
                 <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-snug">LAPORAN EVALUASI BULANAN BELAJAR</h1>

@@ -35,7 +35,7 @@ export default function VerifyReport() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-xl border-slate-200">
         <CardHeader className="text-center pb-2">
-          <img src="/logo for overlay.png" alt="BMU Logo" className="w-16 h-16 mx-auto mb-4 object-contain" onError={(e) => e.target.style.display='none'} />
+          <img src="/logo.png" alt="BMU Logo" className="w-16 h-16 mx-auto mb-4 object-contain" onError={(e) => e.target.style.display='none'} />
           <CardTitle className="text-2xl font-bold">{t('verify_title')}</CardTitle>
           <p className="text-sm text-muted-foreground">E-Rapot Bahtera Mitra Unggulan</p>
         </CardHeader>
