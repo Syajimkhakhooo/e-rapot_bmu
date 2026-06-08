@@ -19,13 +19,17 @@ module.exports = {
       colors: {
         "error-container": "#fef2f2",
         "error": "#ef4444",
+        "destructive": "#ef4444",
+        "destructive-foreground": "#ffffff",
         "surface-container-lowest": "#ffffff",
         "surface-container-low": "#f8fafc",
         "primary": "#0f172a", /* Professional Dark Navy/Slate */
         "on-primary": "#ffffff",
+        "primary-foreground": "#ffffff",
         "primary-container": "#f1f5f9",
         "on-primary-container": "#0f172a",
         "secondary": "#3b82f6", /* Clear Blue Accent */
+        "secondary-foreground": "#ffffff",
         "secondary-container": "#eff6ff",
         "on-secondary-container": "#1e3a8a",
         "surface-variant": "#f1f5f9",
@@ -38,6 +42,9 @@ module.exports = {
         "surface": "#ffffff",
         "on-background": "#0f172a",
         "on-surface": "#0f172a",
+        
+        "accent": "#f1f5f9",
+        "accent-foreground": "#0f172a",
         
         border: "var(--outline-variant)",
         input: "var(--outline-variant)",
