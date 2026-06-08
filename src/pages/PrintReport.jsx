@@ -180,34 +180,34 @@ export default function PrintReport() {
               <div className="border-b-2 border-black">
                 <div className="text-center font-bold py-1 border-b-2 border-black bg-slate-50">NILAI  結果</div>
                 <div className="grid grid-cols-4 divide-x-2 divide-black text-center">
-                  <div className="flex flex-col">
+                  <div className={`flex flex-col ${Number(report.score_kosakata) < 85 ? 'outline outline-2 outline-red-600 outline-offset-[-2px] bg-red-50/20' : ''}`}>
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">KOSAKATA<br/>語彙</div>
                     <div className="py-2 text-lg font-bold flex items-center justify-center">
-                      <span className={Number(report.score_kosakata) < 85 ? 'text-red-600' : ''}>
+                      <span className="text-black">
                         {report.score_kosakata}/100
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col">
+                  <div className={`flex flex-col ${Number(report.score_hiragana) < 85 ? 'outline outline-2 outline-red-600 outline-offset-[-2px] bg-red-50/20' : ''}`}>
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">HIRAGANA<br/>ひらがな</div>
                     <div className="py-2 text-lg font-bold flex items-center justify-center">
-                      <span className={Number(report.score_hiragana) < 85 ? 'text-red-600' : ''}>
+                      <span className="text-black">
                         {report.score_hiragana}/100
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col">
+                  <div className={`flex flex-col ${Number(report.score_katakana) < 85 ? 'outline outline-2 outline-red-600 outline-offset-[-2px] bg-red-50/20' : ''}`}>
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">KATAKANA<br/>カタカナ</div>
                     <div className="py-2 text-lg font-bold flex items-center justify-center">
-                      <span className={Number(report.score_katakana) < 85 ? 'text-red-600' : ''}>
+                      <span className="text-black">
                         {report.score_katakana}/100
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col">
+                  <div className={`flex flex-col ${Number(report.score_ujian) < 85 ? 'outline outline-2 outline-red-600 outline-offset-[-2px] bg-red-50/20' : ''}`}>
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">HASIL UJIAN<br/>試験結果</div>
                     <div className="py-2 text-lg font-bold flex items-center justify-center">
-                      <span className={Number(report.score_ujian) < 85 ? 'text-red-600' : ''}>
+                      <span className="text-black">
                         {report.score_ujian}/100
                       </span>
                     </div>

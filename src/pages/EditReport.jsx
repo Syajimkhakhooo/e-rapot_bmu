@@ -128,7 +128,7 @@ export default function EditReport() {
     updateReportMutation.mutate(formData)
   }
 
-  const getColor = (score) => score < 85 ? 'text-red-500' : ''
+  const getColor = (score) => score < 85 ? 'border-red-500 bg-red-50 focus-visible:ring-red-500' : ''
   const getBehaviorColor = (b) => {
     if (b === 'C') return 'text-orange-500'
     if (b === 'D') return 'text-red-500'
@@ -188,20 +188,20 @@ export default function EditReport() {
           </div>
           <div className="p-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label className={getColor(formData.score_kosakata)}>Kosakata</Label>
-              <Input type="number" min="0" max="100" required value={formData.score_kosakata} onChange={e => setFormData({...formData, score_kosakata: parseInt(e.target.value)})} />
+              <Label>Kosakata</Label>
+              <Input className={getColor(formData.score_kosakata)} type="number" min="0" max="100" required value={formData.score_kosakata} onChange={e => setFormData({...formData, score_kosakata: parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
-              <Label className={getColor(formData.score_hiragana)}>Hiragana</Label>
-              <Input type="number" min="0" max="100" required value={formData.score_hiragana} onChange={e => setFormData({...formData, score_hiragana: parseInt(e.target.value)})} />
+              <Label>Hiragana</Label>
+              <Input className={getColor(formData.score_hiragana)} type="number" min="0" max="100" required value={formData.score_hiragana} onChange={e => setFormData({...formData, score_hiragana: parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
-              <Label className={getColor(formData.score_katakana)}>Katakana</Label>
-              <Input type="number" min="0" max="100" required value={formData.score_katakana} onChange={e => setFormData({...formData, score_katakana: parseInt(e.target.value)})} />
+              <Label>Katakana</Label>
+              <Input className={getColor(formData.score_katakana)} type="number" min="0" max="100" required value={formData.score_katakana} onChange={e => setFormData({...formData, score_katakana: parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
-              <Label className={getColor(formData.score_ujian)}>Hasil Ujian</Label>
-              <Input type="number" min="0" max="100" required value={formData.score_ujian} onChange={e => setFormData({...formData, score_ujian: parseInt(e.target.value)})} />
+              <Label>Hasil Ujian</Label>
+              <Input className={getColor(formData.score_ujian)} type="number" min="0" max="100" required value={formData.score_ujian} onChange={e => setFormData({...formData, score_ujian: parseInt(e.target.value)})} />
             </div>
           </div>
         </div>
