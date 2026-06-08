@@ -252,7 +252,7 @@ export default function CreateReport() {
               <Select required value={formData.teacher_name} onValueChange={v => setFormData({...formData, teacher_name: v})}>
                 <SelectTrigger><SelectValue placeholder="Select teacher" /></SelectTrigger>
                 <SelectContent>
-                  {signatories?.filter(s => s.role === 'teacher' || s.role === 'Guru Pengajar').map(s => (
+                  {signatories?.filter(s => s.type === 'teacher' || s.type === 'Guru Pengajar').map(s => (
                     <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
                   ))}
                 </SelectContent>
@@ -263,7 +263,7 @@ export default function CreateReport() {
               <Select required value={formData.headmaster_name} onValueChange={v => setFormData({...formData, headmaster_name: v})}>
                 <SelectTrigger><SelectValue placeholder="Select headmaster" /></SelectTrigger>
                 <SelectContent>
-                  {signatories?.filter(s => s.role === 'director' || s.role === 'Kepala Sekolah').map(s => (
+                  {signatories?.filter(s => s.type === 'director' || s.type === 'Kepala Sekolah').map(s => (
                     <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
                   ))}
                 </SelectContent>

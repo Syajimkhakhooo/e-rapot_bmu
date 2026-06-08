@@ -13,7 +13,7 @@ export default function Signatories() {
   const queryClient = useQueryClient()
   const { t } = useTranslation()
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [formData, setFormData] = useState({ name: '', role: 'Kepala Sekolah' })
+  const [formData, setFormData] = useState({ name: '', type: 'Kepala Sekolah' })
 
   const { data: signatories, isLoading } = useQuery({
     queryKey: ['signatories'],
@@ -32,7 +32,7 @@ export default function Signatories() {
     onSuccess: () => {
       queryClient.invalidateQueries(['signatories'])
       setIsCreateOpen(false)
-      setFormData({ name: '', role: 'Kepala Sekolah' })
+      setFormData({ name: '', type: 'Kepala Sekolah' })
       toast.success(t('sig_success_add'))
     },
     onError: (e) => toast.error(e.message),
@@ -50,10 +50,10 @@ export default function Signatories() {
     onError: (e) => toast.error(e.message),
   })
 
-  const getRoleLabel = (role) => {
-    if (role === 'director' || role === 'Kepala Sekolah') return t('sig_director')
-    if (role === 'teacher' || role === 'Guru Pengajar') return t('sig_teacher')
-    return role
+  const getRoleLabel = (type) => {
+    if (type === 'director' || type === 'Kepala Sekolah') return t('sig_director')
+    if (type === 'teacher' || type === 'Guru Pengajar') return t('sig_teacher')
+    return type
   }
 
   return (
@@ -84,7 +84,7 @@ export default function Signatories() {
               </div>
               <div className="space-y-1.5">
                 <Label className="font-label-md text-sm text-on-surface">{t('sig_role')}</Label>
-                <Select value={formData.role} onValueChange={v => setFormData({ ...formData, role: v })}>
+                <Select value={formData.type} onValueChange={v => setFormData({ ...formData, type: v })}>
                   <SelectTrigger className="h-9 rounded-md border-outline-variant font-body-md text-sm text-on-surface">
                     <SelectValue />
                   </SelectTrigger>
@@ -125,7 +125,7 @@ export default function Signatories() {
                   <div>
                     <h3 className="font-body-md text-sm font-medium text-on-surface">{s.name}</h3>
                     <p className="font-label-md text-[10px] text-on-surface-variant uppercase mt-0.5">
-                      {getRoleLabel(s.role)}
+                      {getRoleLabel(s.type)}
                     </p>
                   </div>
                 </div>
