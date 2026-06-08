@@ -13,7 +13,7 @@ export default function Signatories() {
   const queryClient = useQueryClient()
   const { t } = useTranslation()
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [formData, setFormData] = useState({ name: '', type: 'headmaster' })
+  const [formData, setFormData] = useState({ name: '', position: '', type: 'headmaster' })
 
   const { data: signatories, isLoading } = useQuery({
     queryKey: ['signatories'],
@@ -32,7 +32,7 @@ export default function Signatories() {
     onSuccess: () => {
       queryClient.invalidateQueries(['signatories'])
       setIsCreateOpen(false)
-      setFormData({ name: '', type: 'headmaster' })
+      setFormData({ name: '', position: '', type: 'headmaster' })
       toast.success(t('sig_success_add'))
     },
     onError: (e) => toast.error(e.message),
@@ -83,6 +83,10 @@ export default function Signatories() {
                 <Input required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="h-9 rounded-md border-outline-variant font-body-md text-sm" />
               </div>
               <div className="space-y-1.5">
+                <Label className="font-label-md text-sm text-on-surface">{t('sig_position')}</Label>
+                <Input required value={formData.position} onChange={e => setFormData({ ...formData, position: e.target.value })} className="h-9 rounded-md border-outline-variant font-body-md text-sm" />
+              </div>
+              <div className="space-y-1.5">
                 <Label className="font-label-md text-sm text-on-surface">{t('sig_role')}</Label>
                 <Select value={formData.type} onValueChange={v => setFormData({ ...formData, type: v })}>
                   <SelectTrigger className="h-9 rounded-md border-outline-variant font-body-md text-sm text-on-surface">
@@ -125,7 +129,7 @@ export default function Signatories() {
                   <div>
                     <h3 className="font-body-md text-sm font-medium text-on-surface">{s.name}</h3>
                     <p className="font-label-md text-[10px] text-on-surface-variant uppercase mt-0.5">
-                      {getRoleLabel(s.type)}
+                      {s.position} • {getRoleLabel(s.type)}
                     </p>
                   </div>
                 </div>
