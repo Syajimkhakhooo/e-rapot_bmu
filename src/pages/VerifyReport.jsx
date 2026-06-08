@@ -60,29 +60,30 @@ export default function VerifyReport() {
                 </p>
               </div>
               
-              <div className="bg-slate-50 p-4 rounded-lg border text-sm space-y-3">
-                <div className="grid grid-cols-[100px_1fr]">
-                  <span className="text-slate-500 font-medium">{t('students_name')}</span>
-                  <span className="font-bold text-slate-900">{report.students?.full_name}</span>
+              <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm text-center leading-relaxed">
+                <p className="font-semibold text-slate-800 mb-5 uppercase text-sm">
+                  {i18n.language === 'ja' 
+                    ? "この成績表はBMU成績システムによって公式に発行された原本です：" 
+                    : "Rapot ini adalah ASLI dan RESMI dicetak oleh Sistem E-Rapot BMU pada:"}
+                </p>
+                
+                <div className="grid grid-cols-[100px_1fr] gap-x-2 gap-y-2 text-left max-w-[260px] mx-auto mb-8 font-medium text-sm">
+                  <span className="text-slate-500">{i18n.language === 'ja' ? '日付' : 'TANGGAL'}</span> 
+                  <span>: {new Date(report.created_at).toLocaleDateString(dateLocaleStr, { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  
+                  <span className="text-slate-500">{i18n.language === 'ja' ? '曜日' : 'HARI'}</span>    
+                  <span>: {new Date(report.created_at).toLocaleDateString(dateLocaleStr, { weekday: 'long' })}</span>
+                  
+                  <span className="text-slate-500">{i18n.language === 'ja' ? '時間' : 'JAM'}</span>     
+                  <span>: {new Date(report.created_at).toLocaleTimeString(dateLocaleStr, { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
-                <div className="grid grid-cols-[100px_1fr]">
-                  <span className="text-slate-500 font-medium">{t('students_id')}</span>
-                  <span className="font-medium text-slate-900">{report.students?.student_id}</span>
-                </div>
-                <div className="grid grid-cols-[100px_1fr]">
-                  <span className="text-slate-500 font-medium">{t('students_class')}</span>
-                  <span className="font-medium text-slate-900">{report.students?.classes?.name}</span>
-                </div>
-                <div className="grid grid-cols-[100px_1fr]">
-                  <span className="text-slate-500 font-medium">{t('reports_period')}</span>
-                  <span className="font-medium text-slate-900">
-                    {new Date(report.period_start).toLocaleDateString(dateLocaleStr)} - {new Date(report.period_end).toLocaleDateString(dateLocaleStr)}
-                  </span>
-                </div>
-                <div className="grid grid-cols-[100px_1fr]">
-                  <span className="text-slate-500 font-medium">{t('verify_issued_date')}</span>
-                  <span className="font-medium text-slate-900">{new Date(report.created_at).toLocaleDateString(dateLocaleStr)}</span>
-                </div>
+
+                <p className="text-slate-600 mb-2 text-sm">
+                  {i18n.language === 'ja' ? '授与対象者：' : 'DIBERIKAN KEPADA ATAS NAMA:'}
+                </p>
+                <p className="text-xl font-bold text-primary uppercase border-b-2 border-primary/20 inline-block px-4 pb-1">
+                  {report.students?.full_name}
+                </p>
               </div>
             </div>
           )}
