@@ -54,7 +54,7 @@ export default function CreateReport() {
   const { data: signatories } = useQuery({
     queryKey: ['signatories'],
     queryFn: async () => {
-      const { data } = await supabase.from('signatories').select('*')
+      const { data } = await supabase.from('signatories').select('*').eq('status', 'active')
       return data || []
     }
   })
@@ -263,7 +263,7 @@ export default function CreateReport() {
               <Select required value={formData.headmaster_name} onValueChange={v => setFormData({...formData, headmaster_name: v})}>
                 <SelectTrigger><SelectValue placeholder="Select headmaster" /></SelectTrigger>
                 <SelectContent>
-                  {signatories?.filter(s => s.type === 'director').map(s => (
+                  {signatories?.filter(s => s.type === 'headmaster').map(s => (
                     <SelectItem key={s.id} value={s.name}>{s.name}</SelectItem>
                   ))}
                 </SelectContent>

@@ -13,7 +13,7 @@ export default function Signatories() {
   const queryClient = useQueryClient()
   const { t } = useTranslation()
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [formData, setFormData] = useState({ name: '', type: 'director' })
+  const [formData, setFormData] = useState({ name: '', type: 'headmaster' })
 
   const { data: signatories, isLoading } = useQuery({
     queryKey: ['signatories'],
@@ -32,7 +32,7 @@ export default function Signatories() {
     onSuccess: () => {
       queryClient.invalidateQueries(['signatories'])
       setIsCreateOpen(false)
-      setFormData({ name: '', type: 'director' })
+      setFormData({ name: '', type: 'headmaster' })
       toast.success(t('sig_success_add'))
     },
     onError: (e) => toast.error(e.message),
@@ -51,7 +51,7 @@ export default function Signatories() {
   })
 
   const getRoleLabel = (type) => {
-    if (type === 'director') return t('sig_director')
+    if (type === 'headmaster') return t('sig_director')
     if (type === 'teacher') return t('sig_teacher')
     return type
   }
@@ -89,7 +89,7 @@ export default function Signatories() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="director">{t('sig_director')}</SelectItem>
+                    <SelectItem value="headmaster">{t('sig_director')}</SelectItem>
                     <SelectItem value="teacher">{t('sig_teacher')}</SelectItem>
                   </SelectContent>
                 </Select>
