@@ -98,7 +98,7 @@ export default function PrintReport() {
                 <p className="text-base font-bold text-slate-900 mt-1">学習月次評価レポートバテーテラミトラウングランの生徒</p>
               </div>
               <div className="flex-none text-center flex flex-col items-center">
-                <QRCodeSVG value={`${window.location.origin}/verify/${report.verification_token}`} size={90} />
+                <QRCodeSVG value={`${window.location.origin}/verify/${report.verification_token}`} size={70} />
                 <p className="text-[8px] text-slate-500 mt-1">Scan for Verification</p>
               </div>
             </div>
