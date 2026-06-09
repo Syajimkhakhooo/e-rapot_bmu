@@ -13,7 +13,7 @@ export default function Classes() {
   const queryClient = useQueryClient()
   const { t, i18n } = useTranslation()
   const [isCreateOpen, setIsCreateOpen] = useState(false)
-  const [formData, setFormData] = useState({ name: '' })
+  const [formData, setFormData] = useState({ name: '', is_pemula: false })
 
   const { data: classes, isLoading } = useQuery({
     queryKey: ['classes_list'],
@@ -21,7 +21,7 @@ export default function Classes() {
       const { data, error } = await supabase
         .from('classes')
         .select(`
-          id, name, created_at,
+          id, name, is_pemula, created_at,
           students:students(count)
         `)
         .is('deleted_at', null)
@@ -40,7 +40,7 @@ export default function Classes() {
       queryClient.invalidateQueries(['classes_list'])
       queryClient.invalidateQueries(['dashboard-stats'])
       setIsCreateOpen(false)
-      setFormData({ name: '' })
+      setFormData({ name: '', is_pemula: false })
       toast.success(t('classes_success_add'))
     },
     onError: (e) => toast.error(e.message),
@@ -85,6 +85,18 @@ export default function Classes() {
                 <Label className="font-label-md text-sm text-on-surface">{t('classes_name')}</Label>
                 <Input required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} className="h-9 rounded-md border-outline-variant focus-visible:ring-primary font-body-md text-sm" placeholder="e.g., Kelas 1A" />
               </div>
+              <div className="flex items-center space-x-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="is_pemula"
+                  checked={formData.is_pemula}
+                  onChange={e => setFormData({ ...formData, is_pemula: e.target.checked })}
+                  className="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4 cursor-pointer"
+                />
+                <Label htmlFor="is_pemula" className="font-body-md text-sm text-on-surface cursor-pointer">
+                  Tandai sebagai Kelas Pemula (Hanya pakai nilai Ujian)
+                </Label>
+              </div>
               <div className="pt-2 flex justify-end gap-2">
                 <button type="button" onClick={() => setIsCreateOpen(false)} className="bg-surface-variant text-on-surface-variant hover:bg-outline-variant transition-colors font-label-md text-sm h-9 px-4 rounded-md">
                   {t('cancel')}
@@ -114,7 +126,12 @@ export default function Classes() {
                     <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>class</span>
                   </div>
                   <div>
-                    <h3 className="font-title-lg text-lg text-on-surface leading-tight">{c.name}</h3>
+                    <h3 className="font-title-lg text-lg text-on-surface leading-tight flex items-center gap-2">
+                      {c.name}
+                      {c.is_pemula && (
+                        <span className="bg-primary/10 text-primary text-[10px] uppercase font-bold px-2 py-0.5 rounded">Pemula</span>
+                      )}
+                    </h3>
                     <p className="font-body-md text-xs text-on-surface-variant mt-0.5">
                       {t('classes_created')} {new Date(c.created_at).toLocaleDateString(i18n.language === 'ja' ? 'ja-JP' : 'id-ID', { year: 'numeric', month: 'short', day: 'numeric' })}
                     </p>

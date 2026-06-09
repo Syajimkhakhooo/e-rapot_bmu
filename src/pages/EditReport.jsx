@@ -85,7 +85,7 @@ export default function EditReport() {
   const { data: students } = useQuery({
     queryKey: ['students'],
     queryFn: async () => {
-      const { data } = await supabase.from('students').select('*, classes(name)').is('deleted_at', null)
+      const { data } = await supabase.from('students').select('*, classes(name, is_pemula)').is('deleted_at', null)
       return data || []
     }
   })
@@ -128,7 +128,14 @@ export default function EditReport() {
     updateReportMutation.mutate(formData)
   }
 
-  const getColor = (score) => score < 85 ? 'border-red-500 bg-red-50 focus-visible:ring-red-500' : ''
+  const selectedStudent = students?.find(s => s.id === formData.student_id)
+  const isPemula = selectedStudent?.classes?.is_pemula
+
+  const getColor = (score, isUjian = false) => {
+    if (!isUjian && isPemula && (score === 0 || score === '' || isNaN(score))) return ''
+    return score < 85 ? 'border-red-500 bg-red-50 focus-visible:ring-red-500' : ''
+  }
+
   const getBehaviorColor = (b) => {
     if (b === 'C') return 'text-orange-500'
     if (b === 'D') return 'text-red-500'
@@ -149,7 +156,7 @@ export default function EditReport() {
           <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-primary/5 to-transparent">
             <h3 className="font-bold text-slate-800 text-sm">{t('form_student_period')}</h3>
           </div>
-          <div className="p-6 grid grid-cols-2 gap-4">
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2 col-span-2">
               <Label>{t('reports_student')}</Label>
               <Select required value={formData.student_id} onValueChange={v => setFormData({...formData, student_id: v})}>
@@ -186,22 +193,22 @@ export default function EditReport() {
           <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-secondary/5 to-transparent">
             <h3 className="font-bold text-slate-800 text-sm">{t('form_scores')}</h3>
           </div>
-          <div className="p-6 grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label>Kosakata</Label>
-              <Input className={getColor(formData.score_kosakata)} type="number" min="0" max="100" required value={formData.score_kosakata} onChange={e => setFormData({...formData, score_kosakata: parseInt(e.target.value)})} />
+              <Input className={getColor(formData.score_kosakata, false)} type="number" min="0" max="100" required={!isPemula} value={formData.score_kosakata} onChange={e => setFormData({...formData, score_kosakata: e.target.value === '' ? '' : parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
               <Label>Hiragana</Label>
-              <Input className={getColor(formData.score_hiragana)} type="number" min="0" max="100" required value={formData.score_hiragana} onChange={e => setFormData({...formData, score_hiragana: parseInt(e.target.value)})} />
+              <Input className={getColor(formData.score_hiragana, false)} type="number" min="0" max="100" required={!isPemula} value={formData.score_hiragana} onChange={e => setFormData({...formData, score_hiragana: e.target.value === '' ? '' : parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
               <Label>Katakana</Label>
-              <Input className={getColor(formData.score_katakana)} type="number" min="0" max="100" required value={formData.score_katakana} onChange={e => setFormData({...formData, score_katakana: parseInt(e.target.value)})} />
+              <Input className={getColor(formData.score_katakana, false)} type="number" min="0" max="100" required={!isPemula} value={formData.score_katakana} onChange={e => setFormData({...formData, score_katakana: e.target.value === '' ? '' : parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
               <Label>Hasil Ujian</Label>
-              <Input className={getColor(formData.score_ujian)} type="number" min="0" max="100" required value={formData.score_ujian} onChange={e => setFormData({...formData, score_ujian: parseInt(e.target.value)})} />
+              <Input className={getColor(formData.score_ujian, true)} type="number" min="0" max="100" required value={formData.score_ujian} onChange={e => setFormData({...formData, score_ujian: e.target.value === '' ? '' : parseInt(e.target.value)})} />
             </div>
           </div>
         </div>
@@ -211,7 +218,7 @@ export default function EditReport() {
             <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-primary/5 to-transparent">
               <h3 className="font-bold text-slate-800 text-sm">{t('form_attendance')}</h3>
             </div>
-            <div className="p-6 grid grid-cols-3 gap-4">
+            <div className="p-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>{t('form_sick')}</Label>
                 <Input type="number" min="0" required value={formData.attendance_sakit} onChange={e => setFormData({...formData, attendance_sakit: parseInt(e.target.value)})} />

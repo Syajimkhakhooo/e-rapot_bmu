@@ -19,7 +19,7 @@ export default function PrintReport() {
         .from('reports')
         .select(`
           *,
-          students(full_name, japanese_name, student_id, photo_url, classes(name))
+          students(full_name, japanese_name, student_id, photo_url, classes(name, is_pemula))
         `)
         .eq('id', id)
         .single()
@@ -66,6 +66,19 @@ export default function PrintReport() {
     return jpMat;
   }
 
+  const isPemula = s?.classes?.is_pemula;
+  
+  const getScoreBg = (score, isUjian = false) => {
+    if (!isUjian && isPemula && (Number(score) === 0 || !score)) return '';
+    return Number(score) < 85 ? 'bg-red-600' : '';
+  }
+
+  const getDisplayScore = (score, isUjian = false) => {
+    if (!isUjian && isPemula && (Number(score) === 0 || !score)) return '-';
+    return score;
+  }
+
+
   return (
     <div className="max-w-4xl mx-auto pb-12 space-y-6">
       <div className="flex items-center justify-between no-print">
@@ -78,7 +91,8 @@ export default function PrintReport() {
       </div>
 
       {/* Printable Area */}
-      <div className="bg-white shadow-lg print:shadow-none print:m-0 mx-auto" style={{ width: '210mm', minHeight: '297mm' }}>
+      <div className="w-full overflow-x-auto pb-8 print:pb-0">
+        <div className="bg-white shadow-lg print:shadow-none print:m-0 mx-auto" style={{ width: '210mm', minWidth: '210mm', minHeight: '297mm' }}>
         <div ref={componentRef} className="px-10 py-8 w-full h-full relative text-slate-900 bg-white">
           
           {/* Logo Watermark (Optional) */}
@@ -182,33 +196,33 @@ export default function PrintReport() {
                 <div className="grid grid-cols-4 divide-x-2 divide-black text-center">
                   <div className="flex flex-col">
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">KOSAKATA<br/>語彙</div>
-                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${Number(report.score_kosakata) < 85 ? 'bg-red-600' : ''}`}>
+                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${getScoreBg(report.score_kosakata, false)}`}>
                       <span className="text-black">
-                        {report.score_kosakata}
+                        {getDisplayScore(report.score_kosakata, false)}
                       </span>
                     </div>
                   </div>
                   <div className="flex flex-col">
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">HIRAGANA<br/>ひらがな</div>
-                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${Number(report.score_hiragana) < 85 ? 'bg-red-600' : ''}`}>
+                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${getScoreBg(report.score_hiragana, false)}`}>
                       <span className="text-black">
-                        {report.score_hiragana}
+                        {getDisplayScore(report.score_hiragana, false)}
                       </span>
                     </div>
                   </div>
                   <div className="flex flex-col">
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">KATAKANA<br/>カタカナ</div>
-                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${Number(report.score_katakana) < 85 ? 'bg-red-600' : ''}`}>
+                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${getScoreBg(report.score_katakana, false)}`}>
                       <span className="text-black">
-                        {report.score_katakana}
+                        {getDisplayScore(report.score_katakana, false)}
                       </span>
                     </div>
                   </div>
                   <div className="flex flex-col">
                     <div className="font-bold py-1 border-b-2 border-black bg-slate-50">HASIL UJIAN<br/>試験結果</div>
-                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${Number(report.score_ujian) < 85 ? 'bg-red-600' : ''}`}>
+                    <div className={`py-2 text-lg font-bold flex items-center justify-center ${getScoreBg(report.score_ujian, true)}`}>
                       <span className="text-black">
-                        {report.score_ujian}/100
+                        {getDisplayScore(report.score_ujian, true)}/100
                       </span>
                     </div>
                   </div>
@@ -324,6 +338,7 @@ export default function PrintReport() {
 
           </div>
         </div>
+      </div>
       </div>
       
       {/* Global Print Styles */}
