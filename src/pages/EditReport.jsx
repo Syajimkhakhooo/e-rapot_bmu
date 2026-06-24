@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -42,6 +42,8 @@ export default function EditReport() {
     teacher_name: '',
     headmaster_name: ''
   })
+
+  const [selectedClass, setSelectedClass] = useState('')
 
   // Fetch Report
   const { data: report, isLoading: isReportLoading } = useQuery({
@@ -89,6 +91,18 @@ export default function EditReport() {
       return data || []
     }
   })
+
+  // Pre-fill selectedClass based on student
+  useEffect(() => {
+    if (formData.student_id && students && !selectedClass) {
+      const student = students.find(s => s.id === formData.student_id)
+      if (student?.classes?.name) {
+        setSelectedClass(student.classes.name)
+      } else {
+        setSelectedClass('all')
+      }
+    }
+  }, [formData.student_id, students, selectedClass])
 
   const { data: signatories } = useQuery({
     queryKey: ['signatories'],
@@ -157,14 +171,26 @@ export default function EditReport() {
             <h3 className="font-bold text-slate-800 text-sm">{t('form_student_period')}</h3>
           </div>
           <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2 col-span-2">
+            <div className="space-y-2 col-span-1">
+              <Label>Pilih Kelas</Label>
+              <Select value={selectedClass} onValueChange={v => { setSelectedClass(v); setFormData({...formData, student_id: ''}); }}>
+                <SelectTrigger><SelectValue placeholder="Pilih kelas..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Kelas</SelectItem>
+                  {Array.from(new Set(students?.map(s => s.classes?.name).filter(Boolean))).map(c => (
+                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2 col-span-1">
               <Label>{t('reports_student')}</Label>
-              <Select required value={formData.student_id} onValueChange={v => setFormData({...formData, student_id: v})}>
+              <Select required value={formData.student_id} onValueChange={v => setFormData({...formData, student_id: v})} disabled={!selectedClass}>
                 <SelectTrigger><SelectValue placeholder="Select student..." /></SelectTrigger>
                 <SelectContent>
-                  {students?.map(s => (
+                  {students?.filter(s => selectedClass === 'all' || s.classes?.name === selectedClass).map(s => (
                     <SelectItem key={s.id} value={s.id}>
-                      {s.full_name} ({s.student_id}) - {s.classes?.name}
+                      {s.full_name} ({s.student_id})
                     </SelectItem>
                   ))}
                 </SelectContent>
