@@ -132,10 +132,10 @@ export default function Students() {
     setIsDeleteOpen(true)
   }
 
-  const filtered = students?.filter(s =>
-    s.full_name?.toLowerCase().includes(search.toLowerCase()) ||
-    s.student_id?.toLowerCase().includes(search.toLowerCase()) ||
-    s.classes?.name?.toLowerCase().includes(search.toLowerCase())
+  const filtered = (students || []).filter(s =>
+    s.full_name?.toLowerCase()?.includes(search.toLowerCase()) ||
+    s.student_id?.toLowerCase()?.includes(search.toLowerCase()) ||
+    s.classes?.name?.toLowerCase()?.includes(search.toLowerCase())
   )
 
   return (

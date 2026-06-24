@@ -49,9 +49,9 @@ export default function Reports() {
     setIsDeleteOpen(true)
   }
 
-  const filtered = reports?.filter(r => 
-    r.students?.full_name?.toLowerCase().includes(search.toLowerCase()) || 
-    r.students?.student_id?.toLowerCase().includes(search.toLowerCase())
+  const filtered = (reports || []).filter(r => 
+    r.students?.full_name?.toLowerCase()?.includes(search.toLowerCase()) || 
+    r.students?.student_id?.toLowerCase()?.includes(search.toLowerCase())
   )
 
   const dateLocaleStr = i18n.language === 'ja' ? 'ja-JP' : 'id-ID'

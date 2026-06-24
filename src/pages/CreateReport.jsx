@@ -127,7 +127,7 @@ export default function CreateReport() {
                 <SelectTrigger><SelectValue placeholder="Pilih kelas..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Semua Kelas</SelectItem>
-                  {Array.from(new Set(students?.map(s => s.classes?.name).filter(Boolean))).map(c => (
+                  {Array.from(new Set((students || []).map(s => s.classes?.name).filter(Boolean))).map(c => (
                     <SelectItem key={c} value={c}>{c}</SelectItem>
                   ))}
                 </SelectContent>
@@ -138,7 +138,7 @@ export default function CreateReport() {
               <Select required value={formData.student_id} onValueChange={v => setFormData({...formData, student_id: v})} disabled={!selectedClass}>
                 <SelectTrigger><SelectValue placeholder="Select student..." /></SelectTrigger>
                 <SelectContent>
-                  {students?.filter(s => selectedClass === 'all' || s.classes?.name === selectedClass).map(s => (
+                  {(students || []).filter(s => selectedClass === 'all' || s.classes?.name === selectedClass).map(s => (
                     <SelectItem key={s.id} value={s.id}>
                       {s.full_name} ({s.student_id})
                     </SelectItem>
