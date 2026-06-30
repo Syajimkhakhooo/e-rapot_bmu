@@ -310,7 +310,7 @@ export default function PrintReport() {
 
             {/* Footer / Signatures */}
             <div className="mt-6 flex items-start justify-between text-[13px]">
-              <div className="text-center w-40 flex flex-col h-[150px] pt-[22px]">
+              <div className="text-center w-40 flex flex-col h-[180px] pt-[22px]">
                 <div>
                   <p className="font-bold mb-1">WALI SISWA</p>
                   <p className="font-bold">学生保護者</p>
@@ -318,21 +318,31 @@ export default function PrintReport() {
                 <p className="font-bold uppercase mt-auto border-b border-black w-full pb-1 inline-block mx-auto" style={{maxWidth: '120px'}}>{report.guardian_name}</p>
               </div>
 
-              <div className="text-center w-40 flex flex-col h-[150px] pt-[22px]">
+              <div className="text-center w-40 flex flex-col h-[180px] pt-[22px]">
                 <div>
                   <p className="font-bold mb-1">GURU PENGAJAR</p>
                   <p className="font-bold">先生</p>
                 </div>
-                <p className="font-bold uppercase mt-auto border-b border-black w-full pb-1 inline-block mx-auto" style={{maxWidth: '120px'}}>{report.teacher_name}</p>
+                {report.teacher_name && (
+                  <div className="mt-auto flex justify-center pb-2">
+                    <QRCodeSVG value={`Nama : ${report.teacher_name}\nJabatan : Guru Pengajar\nLPK SO BAHTERA MITRA UNGGULAN`} size={55} />
+                  </div>
+                )}
+                <p className={`font-bold uppercase ${!report.teacher_name ? 'mt-auto' : ''} border-b border-black w-full pb-1 inline-block mx-auto`} style={{maxWidth: '120px'}}>{report.teacher_name}</p>
               </div>
               
-              <div className="text-center w-40 flex flex-col h-[150px]">
+              <div className="text-center w-40 flex flex-col h-[180px]">
                 <div>
                   <p className="font-bold mb-1">MENGETAHUI</p>
                   <p className="font-bold mb-1">KEPALA SEKOLAH</p>
                   <p className="font-bold">校長</p>
                 </div>
-                <p className="font-bold uppercase mt-auto border-b border-black w-full pb-1 inline-block mx-auto" style={{maxWidth: '120px'}}>{report.headmaster_name}</p>
+                {report.headmaster_name && (
+                  <div className="mt-auto flex justify-center pb-2">
+                    <QRCodeSVG value={`Nama : ${report.headmaster_name}\nJabatan : Kepala Sekolah\nLPK SO BAHTERA MITRA UNGGULAN`} size={55} />
+                  </div>
+                )}
+                <p className={`font-bold uppercase ${!report.headmaster_name ? 'mt-auto' : ''} border-b border-black w-full pb-1 inline-block mx-auto`} style={{maxWidth: '120px'}}>{report.headmaster_name}</p>
               </div>
             </div>
 

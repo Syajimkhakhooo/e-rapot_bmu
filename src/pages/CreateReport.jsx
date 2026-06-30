@@ -12,6 +12,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 import { useTranslation } from 'react-i18next'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { format, parseISO } from "date-fns"
 
 export default function CreateReport() {
   const navigate = useNavigate()
@@ -94,7 +97,7 @@ export default function CreateReport() {
     createReportMutation.mutate(formData)
   }
 
-  const selectedStudent = students?.find(s => s.id === formData.student_id)
+  const selectedStudent = students?.find(s => String(s.id) === String(formData.student_id))
   const isPemula = selectedStudent?.classes?.is_pemula
 
   const getColor = (score, isUjian = false) => {
@@ -135,11 +138,11 @@ export default function CreateReport() {
             </div>
             <div className="space-y-2 col-span-1">
               <Label>{t('reports_student')}</Label>
-              <Select required value={formData.student_id} onValueChange={v => setFormData({...formData, student_id: v})} disabled={!selectedClass}>
+              <Select required value={formData.student_id ? String(formData.student_id) : ''} onValueChange={v => setFormData({...formData, student_id: v})} disabled={!selectedClass}>
                 <SelectTrigger><SelectValue placeholder="Select student..." /></SelectTrigger>
                 <SelectContent>
                   {(students || []).filter(s => selectedClass === 'all' || s.classes?.name === selectedClass).map(s => (
-                    <SelectItem key={s.id} value={s.id}>
+                    <SelectItem key={s.id} value={String(s.id)}>
                       {s.full_name} ({s.student_id})
                     </SelectItem>
                   ))}
@@ -148,11 +151,21 @@ export default function CreateReport() {
             </div>
             <div className="space-y-2">
               <Label>{t('form_period_start')}</Label>
-              <Input type="date" required value={formData.period_start} onChange={e => setFormData({...formData, period_start: e.target.value})} />
+              <Input
+                type="date"
+                required
+                value={formData.period_start}
+                onChange={e => setFormData({...formData, period_start: e.target.value})}
+              />
             </div>
             <div className="space-y-2">
               <Label>{t('form_period_end')}</Label>
-              <Input type="date" required value={formData.period_end} onChange={e => setFormData({...formData, period_end: e.target.value})} />
+              <Input
+                type="date"
+                required
+                value={formData.period_end}
+                onChange={e => setFormData({...formData, period_end: e.target.value})}
+              />
             </div>
             <div className="space-y-2">
               <Label>{t('form_study_time')} (Contoh: 08.00 - 12.00)</Label>

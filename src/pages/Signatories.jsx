@@ -120,19 +120,8 @@ export default function Signatories() {
           </div>
         ) : (
           signatories?.map((s) => (
-            <div key={s.id} className="bg-surface border border-outline-variant rounded-lg p-5 hover:shadow-sm transition-all group">
-              <div className="flex justify-between items-start">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded border border-outline-variant/50 bg-surface-variant flex items-center justify-center text-on-surface-variant">
-                    <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>edit_document</span>
-                  </div>
-                  <div>
-                    <h3 className="font-body-md text-sm font-medium text-on-surface">{s.name}</h3>
-                    <p className="font-label-md text-[10px] text-on-surface-variant uppercase mt-0.5">
-                      {s.position} • {getRoleLabel(s.type)}
-                    </p>
-                  </div>
-                </div>
+            <div key={s.id} className="bg-surface border border-outline-variant rounded-lg p-6 hover:shadow-sm transition-all group relative flex flex-col items-center justify-center text-center">
+              <div className="absolute top-2 right-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="text-on-surface-variant hover:text-on-surface hover:bg-surface-variant p-1 rounded transition-colors opacity-0 group-hover:opacity-100">
@@ -145,6 +134,28 @@ export default function Signatories() {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </div>
+              
+              <div className="w-full flex flex-col items-center mt-2">
+                <div className="w-full max-w-[180px] h-20 border-b-2 border-dashed border-outline-variant flex items-center justify-center text-outline mb-4 relative">
+                  <span className="material-symbols-outlined text-4xl opacity-20 absolute rotate-[-10deg]">draw</span>
+                  <span className="font-body-md text-xs text-on-surface-variant opacity-50 absolute bottom-1">Tanda Tangan Digital</span>
+                </div>
+                <div className="space-y-1 text-left w-full max-w-[220px]">
+                  <p className="font-body-md text-sm text-on-surface flex justify-between">
+                    <span className="font-medium text-on-surface-variant w-16">Nama</span> 
+                    <span className="mr-2">:</span> 
+                    <span className="flex-1 font-semibold">{s.name}</span>
+                  </p>
+                  <p className="font-body-md text-sm text-on-surface flex justify-between">
+                    <span className="font-medium text-on-surface-variant w-16">Jabatan</span> 
+                    <span className="mr-2">:</span> 
+                    <span className="flex-1">{s.position}</span>
+                  </p>
+                  <p className="font-body-md text-sm text-on-surface font-bold text-center mt-3 pt-2 border-t border-outline-variant/30">
+                    LPK SO BAHTERA MITRA UNGGULAN
+                  </p>
+                </div>
               </div>
             </div>
           ))

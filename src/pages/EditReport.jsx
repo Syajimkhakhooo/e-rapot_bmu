@@ -11,6 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGr
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+import { format, parseISO } from "date-fns"
 
 export default function EditReport() {
   const { id } = useParams()
@@ -84,7 +87,7 @@ export default function EditReport() {
     }
   }, [report])
 
-  const { data: students } = useQuery({
+  const { data: students, isLoading: isStudentsLoading } = useQuery({
     queryKey: ['students'],
     queryFn: async () => {
       const { data } = await supabase.from('students').select('*, classes(name, is_pemula)').is('deleted_at', null)
@@ -92,17 +95,10 @@ export default function EditReport() {
     }
   })
 
-  // Pre-fill selectedClass based on student
-  useEffect(() => {
-    if (formData.student_id && students && !selectedClass) {
-      const student = students.find(s => s.id === formData.student_id)
-      if (student?.classes?.name) {
-        setSelectedClass(student.classes.name)
-      } else {
-        setSelectedClass('all')
-      }
-    }
-  }, [formData.student_id, students, selectedClass])
+  const selectedStudent = students?.find(s => String(s.id) === String(formData.student_id))
+  
+  // Pre-fill selectedClass based on student synchronously
+  const effectiveSelectedClass = selectedClass || (selectedStudent ? (selectedStudent.classes?.name || 'all') : '')
 
   const { data: signatories } = useQuery({
     queryKey: ['signatories'],
@@ -142,7 +138,6 @@ export default function EditReport() {
     updateReportMutation.mutate(formData)
   }
 
-  const selectedStudent = students?.find(s => s.id === formData.student_id)
   const isPemula = selectedStudent?.classes?.is_pemula
 
   const getColor = (score, isUjian = false) => {
@@ -156,7 +151,7 @@ export default function EditReport() {
     return ''
   }
 
-  if (isReportLoading) return <div className="p-8 text-center">Loading report data...</div>
+  if (isReportLoading || isStudentsLoading) return <div className="p-8 text-center">Loading report data...</div>
 
   return (
     <div className="max-w-3xl mx-auto space-y-5 pb-12">
@@ -173,7 +168,7 @@ export default function EditReport() {
           <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2 col-span-1">
               <Label>Pilih Kelas</Label>
-              <Select value={selectedClass} onValueChange={v => { setSelectedClass(v); setFormData({...formData, student_id: ''}); }}>
+              <Select value={effectiveSelectedClass} onValueChange={v => { setSelectedClass(v); setFormData({...formData, student_id: ''}); }}>
                 <SelectTrigger><SelectValue placeholder="Pilih kelas..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Semua Kelas</SelectItem>
@@ -185,11 +180,11 @@ export default function EditReport() {
             </div>
             <div className="space-y-2 col-span-1">
               <Label>{t('reports_student')}</Label>
-              <Select required value={formData.student_id} onValueChange={v => setFormData({...formData, student_id: v})} disabled={!selectedClass}>
+              <Select required value={formData.student_id ? String(formData.student_id) : ''} onValueChange={v => setFormData({...formData, student_id: v})} disabled={!effectiveSelectedClass}>
                 <SelectTrigger><SelectValue placeholder="Select student..." /></SelectTrigger>
                 <SelectContent>
-                  {(students || []).filter(s => selectedClass === 'all' || s.classes?.name === selectedClass).map(s => (
-                    <SelectItem key={s.id} value={s.id}>
+                  {(students || []).filter(s => effectiveSelectedClass === 'all' || s.classes?.name === effectiveSelectedClass).map(s => (
+                    <SelectItem key={s.id} value={String(s.id)}>
                       {s.full_name} ({s.student_id})
                     </SelectItem>
                   ))}
@@ -198,11 +193,21 @@ export default function EditReport() {
             </div>
             <div className="space-y-2">
               <Label>{t('form_period_start')}</Label>
-              <Input type="date" required value={formData.period_start} onChange={e => setFormData({...formData, period_start: e.target.value})} />
+              <Input
+                type="date"
+                required
+                value={formData.period_start}
+                onChange={e => setFormData({...formData, period_start: e.target.value})}
+              />
             </div>
             <div className="space-y-2">
               <Label>{t('form_period_end')}</Label>
-              <Input type="date" required value={formData.period_end} onChange={e => setFormData({...formData, period_end: e.target.value})} />
+              <Input
+                type="date"
+                required
+                value={formData.period_end}
+                onChange={e => setFormData({...formData, period_end: e.target.value})}
+              />
             </div>
             <div className="space-y-2">
               <Label>{t('form_study_time')} (Contoh: 08.00 - 12.00)</Label>
