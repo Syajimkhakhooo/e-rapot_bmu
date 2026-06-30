@@ -143,14 +143,14 @@ export default function ClassReportDetail() {
                             <MoreVertical className="w-4 h-4" />
                           </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
+                        <DropdownMenuContent align="end" className="z-[9999] bg-white border border-slate-200 shadow-md rounded-md min-w-[160px]">
+                          <DropdownMenuItem asChild className="cursor-pointer hover:bg-slate-50">
                             <Link to={`/reports/${r.id}/print`}><Printer className="w-4 h-4 mr-2" /> {t('reports_view_print')}</Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
+                          <DropdownMenuItem asChild className="cursor-pointer hover:bg-slate-50">
                             <Link to={`/reports/${r.id}/edit`}><Edit className="w-4 h-4 mr-2" /> {t('reports_edit')}</Link>
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="text-orange-600" onClick={() => softDeleteMutation.mutate(r.id)}>
+                          <DropdownMenuItem className="text-orange-600 cursor-pointer hover:bg-slate-50" onClick={() => softDeleteMutation.mutate(r.id)}>
                             <ArchiveRestore className="w-4 h-4 mr-2" /> {t('reports_archive')}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
