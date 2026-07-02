@@ -96,7 +96,7 @@ export default function PrintReport() {
         <div ref={componentRef} className="px-10 py-8 w-full h-full relative text-slate-900 bg-white">
           
           {/* Logo Watermark (Optional) */}
-          <div className="absolute inset-0 z-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+          <div className="absolute inset-0 z-0 flex items-center justify-center opacity-10 pointer-events-none">
             <img src="/logo.png" alt="Watermark" className="w-[500px] object-contain" />
           </div>
 
@@ -195,7 +195,9 @@ export default function PrintReport() {
                 <div className="text-center font-bold py-1 border-b-2 border-black bg-slate-50">NILAI  結果</div>
                 <div className="grid grid-cols-4 divide-x-2 divide-black text-center">
                   <div className="flex flex-col">
-                    <div className="font-bold py-1 border-b-2 border-black bg-slate-50">KOSAKATA<br/>語彙</div>
+                    <div className="font-bold py-1 border-b-2 border-black bg-slate-50">
+                      {isPemula ? <>KOSAKATA<br/>語彙</> : <>KANJI<br/>漢字</>}
+                    </div>
                     <div className={`py-2 text-lg font-bold flex items-center justify-center ${getScoreBg(report.score_kosakata, false)}`}>
                       <span className="text-black">
                         {getDisplayScore(report.score_kosakata, false)}
@@ -203,7 +205,9 @@ export default function PrintReport() {
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <div className="font-bold py-1 border-b-2 border-black bg-slate-50">HIRAGANA<br/>ひらがな</div>
+                    <div className="font-bold py-1 border-b-2 border-black bg-slate-50">
+                      {isPemula ? <>HIRAGANA<br/>ひらがな</> : <>KAIWA<br/>会話</>}
+                    </div>
                     <div className={`py-2 text-lg font-bold flex items-center justify-center ${getScoreBg(report.score_hiragana, false)}`}>
                       <span className="text-black">
                         {getDisplayScore(report.score_hiragana, false)}
@@ -211,7 +215,9 @@ export default function PrintReport() {
                     </div>
                   </div>
                   <div className="flex flex-col">
-                    <div className="font-bold py-1 border-b-2 border-black bg-slate-50">KATAKANA<br/>カタカナ</div>
+                    <div className="font-bold py-1 border-b-2 border-black bg-slate-50">
+                      {isPemula ? <>KATAKANA<br/>カタカナ</> : <>BUNPOU<br/>文法</>}
+                    </div>
                     <div className={`py-2 text-lg font-bold flex items-center justify-center ${getScoreBg(report.score_katakana, false)}`}>
                       <span className="text-black">
                         {getDisplayScore(report.score_katakana, false)}
@@ -281,9 +287,9 @@ export default function PrintReport() {
                   <div className="flex flex-col">
                     <div className="text-center font-bold py-1 border-b border-black bg-slate-50">TES FISIK</div>
                     <div className="grid grid-cols-3 divide-x border-b border-black text-center font-bold bg-slate-50">
-                      <div className="py-1">PUSH UP</div>
-                      <div className="py-1">SIT UP</div>
-                      <div className="py-1">LARI</div>
+                      <div className="py-1 text-xs sm:text-sm">PUSH UP<br/>/ 1 Menit</div>
+                      <div className="py-1 text-xs sm:text-sm">SIT UP<br/>/ 1 Menit</div>
+                      <div className="py-1 text-xs sm:text-sm">LARI<br/>/ 1 Menit</div>
                     </div>
                     <div className="grid grid-cols-3 divide-x text-center font-bold py-2">
                       <div>{report.physical_push_up}</div>
@@ -323,7 +329,12 @@ export default function PrintReport() {
                   <p className="font-bold mb-1">GURU PENGAJAR</p>
                   <p className="font-bold">先生</p>
                 </div>
-                <p className="font-bold uppercase mt-auto border-b border-black w-full pb-1 inline-block mx-auto" style={{maxWidth: '120px'}}>{report.teacher_name}</p>
+                {report.teacher_name && (
+                  <div className="mt-auto flex justify-center pb-2">
+                    <QRCodeSVG value={`Nama : ${report.teacher_name}\nJabatan : Guru Pengajar\nLPK SO BAHTERA MITRA UNGGULAN`} size={55} />
+                  </div>
+                )}
+                <p className={`font-bold uppercase ${!report.teacher_name ? 'mt-auto' : ''} border-b border-black w-full pb-1 inline-block mx-auto`} style={{maxWidth: '120px'}}>{report.teacher_name}</p>
               </div>
               
               <div className="text-center w-40 flex flex-col h-[180px]">
@@ -332,7 +343,12 @@ export default function PrintReport() {
                   <p className="font-bold mb-1">KEPALA SEKOLAH</p>
                   <p className="font-bold">校長</p>
                 </div>
-                <p className="font-bold uppercase mt-auto border-b border-black w-full pb-1 inline-block mx-auto" style={{maxWidth: '120px'}}>{report.headmaster_name}</p>
+                {report.headmaster_name && (
+                  <div className="mt-auto flex justify-center pb-2">
+                    <QRCodeSVG value={`Nama : ${report.headmaster_name}\nJabatan : Kepala Sekolah\nLPK SO BAHTERA MITRA UNGGULAN`} size={55} />
+                  </div>
+                )}
+                <p className={`font-bold uppercase ${!report.headmaster_name ? 'mt-auto' : ''} border-b border-black w-full pb-1 inline-block mx-auto`} style={{maxWidth: '120px'}}>{report.headmaster_name}</p>
               </div>
             </div>
 

@@ -26,7 +26,7 @@ export default function EditReport() {
     student_id: '',
     period_start: '',
     period_end: '',
-    study_time: '',
+    study_time: '08.30 - 15.30',
     learning_material: '',
     score_kosakata: 0,
     score_hiragana: 0,
@@ -65,7 +65,7 @@ export default function EditReport() {
         student_id: report.student_id,
         period_start: report.period_start || '',
         period_end: report.period_end || '',
-        study_time: report.study_time || '',
+        study_time: '08.30 - 15.30',
         learning_material: report.learning_material || '',
         score_kosakata: report.score_kosakata || 0,
         score_hiragana: report.score_hiragana || 0,
@@ -210,8 +210,8 @@ export default function EditReport() {
               />
             </div>
             <div className="space-y-2">
-              <Label>{t('form_study_time')} (Contoh: 08.00 - 12.00)</Label>
-              <Input type="text" required value={formData.study_time} placeholder="08.00 - 12.00" onChange={e => setFormData({...formData, study_time: e.target.value})} />
+              <Label>{t('form_study_time')} (Fixed)</Label>
+              <Input type="text" readOnly value={formData.study_time} placeholder="08.30 - 15.30" onChange={e => setFormData({...formData, study_time: e.target.value})} className="bg-slate-50" />
             </div>
             <div className="space-y-2 col-span-2">
               <Label>{t('form_material')}</Label>
@@ -226,15 +226,15 @@ export default function EditReport() {
           </div>
           <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label>Kosakata</Label>
+              <Label>{isPemula ? 'Kosakata' : 'Kanji'}</Label>
               <Input className={getColor(formData.score_kosakata, false)} type="number" min="0" max="100" required={!isPemula} value={formData.score_kosakata} onChange={e => setFormData({...formData, score_kosakata: e.target.value === '' ? '' : parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
-              <Label>Hiragana</Label>
+              <Label>{isPemula ? 'Hiragana' : 'Kaiwa'}</Label>
               <Input className={getColor(formData.score_hiragana, false)} type="number" min="0" max="100" required={!isPemula} value={formData.score_hiragana} onChange={e => setFormData({...formData, score_hiragana: e.target.value === '' ? '' : parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
-              <Label>Katakana</Label>
+              <Label>{isPemula ? 'Katakana' : 'Bunpou'}</Label>
               <Input className={getColor(formData.score_katakana, false)} type="number" min="0" max="100" required={!isPemula} value={formData.score_katakana} onChange={e => setFormData({...formData, score_katakana: e.target.value === '' ? '' : parseInt(e.target.value)})} />
             </div>
             <div className="space-y-2">
@@ -283,16 +283,16 @@ export default function EditReport() {
             </div>
             <div className="p-6 grid grid-cols-1 gap-4">
               <div className="space-y-2">
-                <Label>Push Up</Label>
-                <Input placeholder="e.g. 50x / Menit" value={formData.physical_push_up} onChange={e => setFormData({...formData, physical_push_up: e.target.value})} />
+                <Label>Push Up / 1 Menit</Label>
+                <Input placeholder="e.g. 50x" value={formData.physical_push_up} onChange={e => setFormData({...formData, physical_push_up: e.target.value})} />
               </div>
               <div className="space-y-2">
-                <Label>Sit Up</Label>
-                <Input placeholder="e.g. 45x / Menit" value={formData.physical_sit_up} onChange={e => setFormData({...formData, physical_sit_up: e.target.value})} />
+                <Label>Sit Up / 1 Menit</Label>
+                <Input placeholder="e.g. 45x" value={formData.physical_sit_up} onChange={e => setFormData({...formData, physical_sit_up: e.target.value})} />
               </div>
               <div className="space-y-2">
-                <Label>Lari</Label>
-                <Input placeholder="e.g. 15 Menit / 2 KM" value={formData.physical_lari} onChange={e => setFormData({...formData, physical_lari: e.target.value})} />
+                <Label>Lari / 1 Menit</Label>
+                <Input placeholder="e.g. 2 KM" value={formData.physical_lari} onChange={e => setFormData({...formData, physical_lari: e.target.value})} />
               </div>
             </div>
           </div>

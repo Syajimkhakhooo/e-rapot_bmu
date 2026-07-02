@@ -14,6 +14,8 @@ export default function Students() {
   const { t } = useTranslation()
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [search, setSearch] = useState('')
+  const [filterClass, setFilterClass] = useState('all')
+  const [filterStatus, setFilterStatus] = useState('all')
   const [formData, setFormData] = useState({
     student_id: '', full_name: '', japanese_name: '', class_id: '',
   })
@@ -132,11 +134,17 @@ export default function Students() {
     setIsDeleteOpen(true)
   }
 
-  const filtered = (students || []).filter(s =>
-    s.full_name?.toLowerCase()?.includes(search.toLowerCase()) ||
-    s.student_id?.toLowerCase()?.includes(search.toLowerCase()) ||
-    s.classes?.name?.toLowerCase()?.includes(search.toLowerCase())
-  )
+  const filtered = (students || []).filter(s => {
+    const searchLower = search.toLowerCase()
+    const matchesSearch = s.full_name?.toLowerCase()?.includes(searchLower) ||
+      s.student_id?.toLowerCase()?.includes(searchLower) ||
+      s.classes?.name?.toLowerCase()?.includes(searchLower)
+      
+    const matchesClass = filterClass === 'all' || s.class_id === filterClass
+    const matchesStatus = filterStatus === 'all' || s.status === filterStatus
+
+    return matchesSearch && matchesClass && matchesStatus
+  })
 
   return (
     <div className="flex flex-col gap-6 animate-fade-in w-full">
@@ -326,10 +334,41 @@ export default function Students() {
               className="w-full bg-surface border border-outline-variant rounded-md pl-9 pr-3 py-1.5 font-body-md text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/50"
             />
           </div>
-          <button className="border border-outline-variant hover:bg-surface-variant text-on-surface-variant transition-colors font-label-md text-xs px-3 py-1.5 rounded-md flex items-center gap-2 shrink-0">
-            <span className="material-symbols-outlined text-[16px]">filter_list</span>
-            {t('students_filter')}
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative border border-outline-variant hover:bg-surface-variant text-on-surface-variant transition-colors font-label-md text-xs px-3 py-1.5 rounded-md flex items-center gap-2 shrink-0">
+                <span className="material-symbols-outlined text-[16px]">filter_list</span>
+                {t('students_filter')}
+                {(filterClass !== 'all' || filterStatus !== 'all') && (
+                  <span className="w-2 h-2 rounded-full bg-primary absolute -top-1 -right-1"></span>
+                )}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 bg-surface border-outline-variant shadow-md rounded-md">
+               <div className="px-2 py-1.5 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Filter Kelas</div>
+               <DropdownMenuItem onClick={() => setFilterClass('all')} className="font-body-md text-sm cursor-pointer justify-between">
+                 Semua Kelas {filterClass === 'all' && <span className="material-symbols-outlined text-[16px]">check</span>}
+               </DropdownMenuItem>
+               {classes?.map(c => (
+                 <DropdownMenuItem key={c.id} onClick={() => setFilterClass(c.id)} className="font-body-md text-sm cursor-pointer justify-between">
+                   {c.name} {filterClass === c.id && <span className="material-symbols-outlined text-[16px]">check</span>}
+                 </DropdownMenuItem>
+               ))}
+               
+               <div className="h-px bg-outline-variant my-1" />
+               
+               <div className="px-2 py-1.5 text-xs font-bold text-on-surface-variant uppercase tracking-wider">Filter Status</div>
+               <DropdownMenuItem onClick={() => setFilterStatus('all')} className="font-body-md text-sm cursor-pointer justify-between">
+                 Semua Status {filterStatus === 'all' && <span className="material-symbols-outlined text-[16px]">check</span>}
+               </DropdownMenuItem>
+               <DropdownMenuItem onClick={() => setFilterStatus('active')} className="font-body-md text-sm cursor-pointer justify-between">
+                 Aktif {filterStatus === 'active' && <span className="material-symbols-outlined text-[16px]">check</span>}
+               </DropdownMenuItem>
+               <DropdownMenuItem onClick={() => setFilterStatus('inactive')} className="font-body-md text-sm cursor-pointer justify-between">
+                 Tidak Aktif {filterStatus === 'inactive' && <span className="material-symbols-outlined text-[16px]">check</span>}
+               </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Table */}
